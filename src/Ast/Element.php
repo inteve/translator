@@ -3,6 +3,7 @@
 	namespace Inteve\Translator\Ast;
 
 	use Inteve\Translator\MessageElement;
+	use Inteve\Translator\Locale;
 
 
 	class Element implements Node
@@ -28,7 +29,7 @@
 		}
 
 
-		public function format(array $parameters)
+		public function format(array $parameters, Locale $locale)
 		{
 			$attrs = [];
 
@@ -38,7 +39,7 @@
 
 					foreach ($attributeValue as $attributeValuePart) {
 						if ($attributeValuePart instanceof Node) {
-							$concatedAttributeValue .= $attributeValuePart->format($parameters);
+							$concatedAttributeValue .= $attributeValuePart->format($parameters, $locale);
 
 						} else {
 							$concatedAttributeValue .= $attributeValuePart;
@@ -48,7 +49,7 @@
 					$attrs[$attributeName] = $concatedAttributeValue;
 
 				} elseif ($attributeValue instanceof Node) {
-					$attrs[$attributeName] = $attributeValue->format($parameters);
+					$attrs[$attributeName] = $attributeValue->format($parameters, $locale);
 
 				} else {
 					$attrs[$attributeName] = $attributeValue;
@@ -59,7 +60,7 @@
 
 			foreach ($this->children as $child) {
 				if ($child instanceof Node) {
-					$children[] = $child->format($parameters);
+					$children[] = $child->format($parameters, $locale);
 
 				} else {
 					$children[] = $child;

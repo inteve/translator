@@ -2,6 +2,8 @@
 
 	namespace Inteve\Translator\Ast;
 
+	use Inteve\Translator\Locale;
+
 
 	class Parameter implements Node
 	{
@@ -19,17 +21,14 @@
 		public function __construct($name, array $modifiers = [])
 		{
 			$this->name = $name;
+			$this->modifiers = $modifiers;
 		}
 
 
-		public function format(array $parameters)
+		public function format(array $parameters, Locale $locale)
 		{
 			if (isset($parameters[$this->name])) {
-				$value = $parameters[$this->name];
-
-				if (is_scalar($value) || $value instanceof \Stringable) {
-					return (string) $value;
-				}
+				return $locale->formatValue($parameters[$this->name], $this->modifiers);
 			}
 
 			return '';

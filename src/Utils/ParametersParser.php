@@ -28,7 +28,7 @@
 
 			while (!$parser->isEnd()) {
 				if ($parser->isCurrent('{$')) {
-					if (($part = $this->parseParameter($parser)) !== NULL) {
+					if (($part = $this->tryParseParameter($parser)) !== NULL) {
 						$parts[] = $part;
 
 					} else { // invalid parameter
@@ -56,13 +56,20 @@
 		/**
 		 * @return Parameter|NULL
 		 */
-		private function parseParameter(StringParser $parser)
+		private function tryParseParameter(StringParser $parser)
 		{
 			return $parser->tryParse(function (StringParser $parser) {
 				$parser->consumeText('{$');
 				$name = $parser->consumeByMatch('[a-zA-Z0-9]([a-zA-Z0-9.])*(\\[[a-zA-Z0-9]\\])*');
+				$modifiers = [];
+
+				while ($parser->isCurrent('|')) {
+					$parser->consumeText('|');
+					$modifiers[] = $parser->consumeByMatch('[a-zA-Z]([a-zA-Z0-9]+)?');
+				}
+
 				$parser->consumeText('}');
-				return new Parameter($name);
+				return new Parameter($name, $modifiers);
 			});
 		}
 

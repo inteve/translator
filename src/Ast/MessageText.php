@@ -3,6 +3,7 @@
 	namespace Inteve\Translator\Ast;
 
 	use Inteve\Translator\MessageElement;
+	use Inteve\Translator\Locale;
 
 
 	class MessageText
@@ -24,13 +25,13 @@
 		 * @param  array<string, mixed> $parameters
 		 * @return array<string|MessageElement>
 		 */
-		public function format(array $parameters)
+		public function format(array $parameters, Locale $locale)
 		{
 			$res = [];
 
 			foreach ($this->children as $child) {
 				if ($child instanceof Node) {
-					$res[] = $child->format($parameters);
+					$res[] = $child->format($parameters, $locale);
 
 				} else {
 					$res[] = $child;

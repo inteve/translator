@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 function createTranslator($lang)
 {
 	return new Translator\TextTranslator(
-		Translator\LanguageTag::fromString($lang),
+		Tests::createLocale($lang),
 		new Translator\UniversalMessageProvider(
 			new Translator\Loaders\MultiLoader([
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('cs'), [

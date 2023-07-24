@@ -14,6 +14,10 @@
 		private $messageProcessor;
 
 
+		/**
+		 * @param MessageLoader $messageLoader
+		 * @param MessageProcessor $messageProcessor
+		 */
 		public function __construct(
 			MessageLoader $messageLoader,
 			MessageProcessor $messageProcessor
@@ -25,25 +29,25 @@
 
 
 		public function getMessage(
-			LanguageTag $languageTag,
+			Locale $locale,
 			MessageId $messageId,
 			array $parameters
 		)
 		{
-			$message = $this->messageLoader->getMessage($languageTag, $messageId);
+			$message = $this->messageLoader->getMessage($locale->getLanguageTag(), $messageId);
 
 			if ($message === NULL || $message === '') {
 				return NULL;
 
 			} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
 				return $this->getMessage(
-					$languageTag,
+					$locale,
 					new MessageId($tmp),
 					$parameters
 				);
 			}
 
 			$messageText = $this->messageProcessor->processMessage($message);
-			return new Message($messageId, $messageText->format($parameters));
+			return new Message($messageId, $messageText->format($parameters, $locale));
 		}
 	}

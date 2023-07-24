@@ -10,7 +10,7 @@
 		 * @return Message|NULL
 		 */
 		function getMessage(
-			LanguageTag $languageTag,
+			Locale $locale,
 			MessageId $messageId,
 			array $parameters
 		);

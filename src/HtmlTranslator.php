@@ -7,19 +7,19 @@
 
 	class HtmlTranslator implements Translator
 	{
-		/** @var LanguageTag */
-		private $languageTag;
+		/** @var Locale */
+		private $locale;
 
 		/** @var MessageProvider */
 		private $messageProvider;
 
 
 		public function __construct(
-			LanguageTag $languageTag,
+			Locale $locale,
 			MessageProvider $messageProvider
 		)
 		{
-			$this->languageTag = $languageTag;
+			$this->locale = $locale;
 			$this->messageProvider = $messageProvider;
 		}
 
@@ -59,7 +59,7 @@
 		 */
 		private function translateMessage(MessageId $messageId, array $parameters)
 		{
-			$message = $this->messageProvider->getMessage($this->languageTag, $messageId, $parameters);
+			$message = $this->messageProvider->getMessage($this->locale, $messageId, $parameters);
 
 			if ($message === NULL) { // missing translate
 				return $messageId->toString();
