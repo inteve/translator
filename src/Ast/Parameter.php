@@ -8,11 +8,15 @@
 		/** @var string */
 		private $name;
 
+		/** @var string[] */
+		private $modifiers;
+
 
 		/**
 		 * @param string $name
+		 * @param string[] $modifiers
 		 */
-		public function __construct($name)
+		public function __construct($name, array $modifiers = [])
 		{
 			$this->name = $name;
 		}

@@ -33,12 +33,27 @@
 
 
 		/**
-		 * @param  non-empty-string $name
+		 * @param  non-empty-string ...$name
 		 * @return bool
 		 */
-		public function is($name)
+		public function is(...$name)
 		{
-			return $this->name === strtolower($name);
+			foreach ($name as $n) {
+				if ($this->name === strtolower($n)) {
+					return TRUE;
+				}
+			}
+
+			return FALSE;
+		}
+
+
+		/**
+		 * @return non-empty-string
+		 */
+		public function getName()
+		{
+			return $this->name;
 		}
 
 
@@ -48,6 +63,15 @@
 		public function getChildren()
 		{
 			return $this->children;
+		}
+
+
+		/**
+		 * @return array<non-empty-string, string|bool>
+		 */
+		public function getAttributes()
+		{
+			return $this->attributes;
 		}
 
 
