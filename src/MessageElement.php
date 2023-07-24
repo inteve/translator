@@ -8,21 +8,27 @@
 		/** @var non-empty-string */
 		private $name;
 
-		/** @var array<non-empty-string, string> */
+		/** @var array<non-empty-string, string|bool> */
 		private $attributes = [];
 
-		/** @var array<string|MessageElement> */
+		/** @var array<string|self> */
 		private $children = [];
 
 
 		/**
 		 * @param non-empty-string $name
-		 * @param array<non-empty-string, string> $attributes
+		 * @param array<non-empty-string, string|bool> $attributes
+		 * @param array<string|self> $children
 		 */
-		public function __construct($name, array $attributes = [])
+		public function __construct(
+			$name,
+			array $attributes = [],
+			array $children = []
+		)
 		{
 			$this->name = strtolower($name);
 			$this->attributes = $attributes;
+			$this->children = $children;
 		}
 
 
@@ -37,33 +43,11 @@
 
 
 		/**
-		 * @return array<string|MessageElement>
+		 * @return array<string|self>
 		 */
 		public function getChildren()
 		{
 			return $this->children;
-		}
-
-
-		/**
-		 * @param  non-empty-string $name
-		 * @param  array<non-empty-string, string> $attributes
-		 * @return self
-		 */
-		public function create($name, array $attributes = [])
-		{
-			return $this->children[] = new self($name, $attributes);
-		}
-
-
-		/**
-		 * @param  string $s
-		 * @return $this
-		 */
-		public function addText($s)
-		{
-			$this->children[] = $s;
-			return $this;
 		}
 
 
@@ -79,13 +63,15 @@
 
 		/**
 		 * @param  non-empty-string $name
-		 * @param  string $value
-		 * @return $this
+		 * @return string|bool
 		 */
-		public function setAttribute($name, $value)
+		public function getAttribute($name)
 		{
-			$this->attributes[$name] = $value;
-			return $this;
+			if (!isset($this->attributes[$name])) {
+				throw new InvalidStateException("Missing attribute '$name'.");
+			}
+
+			return $this->attributes[$name];
 		}
 
 
@@ -106,5 +92,17 @@
 			}
 
 			return $res;
+		}
+
+
+		/**
+		 * @param  non-empty-string $name
+		 * @param  array<non-empty-string, string|bool> $attributes
+		 * @param  array<string|self> $children
+		 * @return self
+		 */
+		public static function el($name, array $attributes = [], $children = [])
+		{
+			return new self($name, $attributes, $children);
 		}
 	}

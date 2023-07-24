@@ -13,6 +13,11 @@
 	}
 
 
+	class InvalidStateException extends Exception
+	{
+	}
+
+
 	class ParseException extends Exception
 	{
 	}

@@ -6,8 +6,8 @@
 	interface MessageProcessor
 	{
 		/**
-		 * @param  string $messageText
-		 * @return array<string|MessageElement|Parameter>
+		 * @param  non-empty-string $messageText
+		 * @return Ast\MessageText
 		 */
 		function processMessage($messageText);
 	}

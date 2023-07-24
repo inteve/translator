@@ -30,12 +30,12 @@
 			array $parameters
 		)
 		{
-			$messageText = $this->messageLoader->getMessage($languageTag, $messageId);
+			$message = $this->messageLoader->getMessage($languageTag, $messageId);
 
-			if ($messageText === NULL) {
-				return $messageText;
+			if ($message === NULL || $message === '') {
+				return NULL;
 
-			} elseif (Strings::startsWith($messageText, '@') && MessageId::isValid($tmp = Strings::substring($messageText, 1))) {
+			} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
 				return $this->getMessage(
 					$languageTag,
 					new MessageId($tmp),
@@ -43,33 +43,7 @@
 				);
 			}
 
-			$messageElements = $this->messageProcessor->processMessage($messageText);
-			return new Message($messageId, $this->replaceParameters($messageElements, $parameters));
-		}
-
-
-		/**
-		 * @param  array<string|MessageElement|Parameter> $messageElements
-		 * @param  array<string, mixed> $parameters
-		 * @return array<string|MessageElement>
-		 */
-		private function replaceParameters(array $messageElements, array $parameters)
-		{
-			$res = [];
-
-			foreach ($messageElements as $messageElement) {
-				if ($messageElement instanceof Parameter) {
-					$paramName = $messageElement->getName();
-
-					if (isset($parameters[$paramName])) {
-						$res[] = $messageElement->toString($parameters[$paramName]);
-					}
-
-				} else {
-					$res[] = $messageElement;
-				}
-			}
-
-			return $res;
+			$messageText = $this->messageProcessor->processMessage($message);
+			return new Message($messageId, $messageText->format($parameters));
 		}
 	}

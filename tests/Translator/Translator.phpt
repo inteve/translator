@@ -5,6 +5,10 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
+/**
+ * @param  string $lang
+ * @return Translator\TextTranslator
+ */
 function createTranslator($lang)
 {
 	return new Translator\TextTranslator(
@@ -13,11 +17,11 @@ function createTranslator($lang)
 			new Translator\Loaders\MultiLoader([
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('cs'), [
 					'homepage.hello' => 'Ahoj!',
-					'homepage.hello2' => 'Ahoj, {$name}!',
+					'homepage.hello2' => 'Ahoj, <b>{$name}</b>!',
 				]),
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('en'), [
 					'homepage.hello' => 'Hello!',
-					'homepage.hello2' => 'Hello, {$name}!',
+					'homepage.hello2' => 'Hello, <b>{$name}</b>!',
 				]),
 			]),
 			new Translator\Processors\HtmlProcessor

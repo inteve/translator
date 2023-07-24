@@ -17,9 +17,6 @@
 		/** @var int */
 		private $offset;
 
-		/** @var bool */
-		private $inTryParse = FALSE;
-
 
 		/**
 		 * @param non-empty-string $text
@@ -46,7 +43,7 @@
 
 
 		/**
-		 * @param  string $text
+		 * @param  non-empty-string $text
 		 * @return bool
 		 */
 		public function isCurrent($text)
@@ -57,7 +54,7 @@
 
 			$length = strlen($text);
 
-			if (($this->offset + $length) >= $this->length) {
+			if (($this->offset + $length) > $this->length) {
 				return FALSE;
 			}
 
@@ -70,7 +67,7 @@
 
 
 		/**
-		 * @param  string $text
+		 * @param  non-empty-string $text
 		 * @return string
 		 */
 		public function consumeText($text)
@@ -81,13 +78,13 @@
 				return $this->consume(strlen($text));
 			}
 
-			throw new \Inteve\Translator\ParseException('No text to consume.');
+			throw new \Inteve\Translator\ParseException('No text (' . $text . ') to consume, there is (' . substr($this->text, $this->offset, 10) . '), offset ' . $this->offset . '.');
 		}
 
 
 		/**
-		 * @param  string $text
-		 * @return string
+		 * @param  non-empty-string $text
+		 * @return non-empty-string
 		 */
 		public function consumeToText($text)
 		{
@@ -106,23 +103,72 @@
 				return $res;
 			}
 
-			throw new \Inteve\Translator\ParseException('No text to consume.');
+			throw new \Inteve\Translator\ParseException('No text to consume before (' . $text . '), there is (' . substr($this->text, $this->offset, 10) . '), offset ' . $this->offset . '.');
 		}
 
 
 		/**
-		 * @param  string $pattern
+		 * @param  non-empty-string $text
+		 * @return string|NULL
+		 */
+		public function tryConsumeToText($text)
+		{
+			Assert::true($text !== '');
+			$res = '';
+
+			while (!$this->isCurrent($text)) {
+				$res .= $this->consume(1);
+
+				if ($this->isEnd()) {
+					break;
+				}
+			}
+
+			if ($res !== '') {
+				return $res;
+			}
+
+			return NULL;
+		}
+
+
+		/**
+		 * @param  non-empty-string $pattern
 		 * @return string
 		 */
 		public function consumeByMatch($pattern)
 		{
 			Assert::true($pattern !== '');
 
-			if ($m = Strings::match($this->text, "\x01(?:$pattern)\x01u", 0, $this->offset)) {
-				return $this->consume(strlen($m[0]));
+			if ($m = Strings::match($this->text, "\x01\\G(?:$pattern)\x01u", 0, $this->offset)) {
+				$length = strlen($m[0]);
+
+				if ($length > 0) {
+					return $this->consume($length);
+				}
 			}
 
-			throw new \Inteve\Translator\ParseException('No text to consume.');
+			throw new \Inteve\Translator\ParseException('No text match (pattern ' . $pattern . ') to consume, there is (' . substr($this->text, $this->offset, 10) . '), offset ' . $this->offset . '.');
+		}
+
+
+		/**
+		 * @param  non-empty-string $pattern
+		 * @return string|NULL
+		 */
+		public function tryConsumeByMatch($pattern)
+		{
+			Assert::true($pattern !== '');
+
+			if ($m = Strings::match($this->text, "\x01\\G(?:$pattern)\x01u", 0, $this->offset)) {
+				$length = strlen($m[0]);
+
+				if ($length > 0) {
+					return $this->consume($length);
+				}
+			}
+
+			return NULL;
 		}
 
 
@@ -133,20 +179,13 @@
 		 */
 		public function tryParse(callable $cb)
 		{
-			if ($this->inTryParse) {
-				throw new \Inteve\Translator\ParseException('There is active tryParse.');
-			}
-
-			$this->inTryParse = TRUE;
 			$offset = $this->offset;
 
 			try {
 				$res = $cb($this);
-				$this->inTryParse = FALSE;
 				return $res;
 
 			} catch (\Inteve\Translator\ParseException $e) {
-				$this->inTryParse = FALSE;
 				$this->offset = $offset;
 				// nothing
 			}
@@ -156,17 +195,17 @@
 
 
 		/**
-		 * @param  int $length
+		 * @param  positive-int $length
 		 * @return string
 		 */
 		public function consume($length)
 		{
 			if ($length <= 0) {
-				throw new \Inteve\Translator\ParseException('Costume length must be greater than 0.');
+				throw new \Inteve\Translator\InvalidStateException('Costume length must be greater than 0.');
 			}
 
 			if (($this->offset + $length) > $this->length) {
-				throw new \Inteve\Translator\ParseException('Consume to out of range is not allowed.');
+				throw new \Inteve\Translator\InvalidStateException('Consume to out of range is not allowed.');
 			}
 
 			$result = substr($this->text, $this->offset, $length);

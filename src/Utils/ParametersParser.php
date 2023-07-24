@@ -2,7 +2,7 @@
 
 	namespace Inteve\Translator\Utils;
 
-	use Inteve\Translator\Parameter;
+	use Inteve\Translator\Ast\Parameter;
 
 
 	class ParametersParser
