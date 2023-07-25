@@ -13,14 +13,19 @@
 		/** @var MessageProvider */
 		private $messageProvider;
 
+		/** @var HtmlTagFactory */
+		private $htmlTagFactory;
+
 
 		public function __construct(
 			Locale $locale,
-			MessageProvider $messageProvider
+			MessageProvider $messageProvider,
+			HtmlTagFactory $htmlTagFactory = NULL
 		)
 		{
 			$this->locale = $locale;
 			$this->messageProvider = $messageProvider;
+			$this->htmlTagFactory = $htmlTagFactory !== NULL ? $htmlTagFactory : new DefaultHtmlTagFactory;
 		}
 
 
@@ -85,8 +90,11 @@
 		 */
 		private function addElementToHtml(Html $target, MessageElement $element)
 		{
-			if ($element->is('b', 'strong', 'em', 'i', 'sub', 'sup', 'span', 'a')) {
-				$target = $target->create($element->getName(), $element->getAttributes());
+			$newTarget = $this->htmlTagFactory->createTag($element);
+
+			if ($newTarget !== NULL) {
+				$target->addHtml($newTarget);
+				$target = $newTarget;
 			}
 
 			foreach ($element->getChildren() as $child) {

@@ -67,10 +67,23 @@
 
 
 		/**
+		 * @param  non-empty-string[]|NULL $whitelist
 		 * @return array<non-empty-string, string|bool>
 		 */
-		public function getAttributes()
+		public function getAttributes(array $whitelist = NULL)
 		{
+			if ($whitelist !== NULL) {
+				$res = [];
+
+				foreach ($whitelist as $item) {
+					if (isset($this->attributes[$item])) {
+						$res[$item] = $this->attributes[$item];
+					}
+				}
+
+				return $res;
+			}
+
 			return $this->attributes;
 		}
 
