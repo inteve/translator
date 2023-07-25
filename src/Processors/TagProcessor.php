@@ -4,36 +4,37 @@
 
 	use Inteve\Translator\Ast;
 	use Inteve\Translator\Utils;
-	use Nette\Utils\Strings;
 
 
 	class TagProcessor implements \Inteve\Translator\MessageProcessor
 	{
-		/** @var Utils\ParametersParser|NULL */
-		private $parametersParser;
+		/** @var \Inteve\Translator\MessageProcessor */
+		private $textPartsProcessor;
+
+
+		public function __construct(\Inteve\Translator\MessageProcessor $textPartsProcessor = NULL)
+		{
+			$this->textPartsProcessor = $textPartsProcessor !== NULL ? $textPartsProcessor : new ParametersProcessor;
+		}
 
 
 		public function processMessage($messageText)
 		{
-			if ($this->parametersParser === NULL) {
-				$this->parametersParser = new Utils\ParametersParser;
-			}
-
 			$parser = new Utils\StringParser($messageText);
-			return Ast\MessageText::normalize($this->parseContent($parser, $this->parametersParser));
+			return Ast\MessageText::normalize($this->parseContent($parser));
 		}
 
 
 		/**
 		 * @return array<string|Ast\Node>
 		 */
-		private function parseContent(Utils\StringParser $parser, Utils\ParametersParser $parametersParser)
+		private function parseContent(Utils\StringParser $parser)
 		{
 			$parts = [];
 
 			while (!$parser->isEnd()) {
 				if ($parser->isCurrent('<')) {
-					if (($part = $this->tryParseElement($parser, $parametersParser)) !== NULL) {
+					if (($part = $this->tryParseElement($parser)) !== NULL) {
 						$parts[] = $part;
 
 					} else { // invalid parameter
@@ -41,15 +42,10 @@
 					}
 
 				} else {
-					$text = $this->parseText($parser, $parametersParser);
+					$text = $this->parseText($parser);
 
-					if (is_array($text)) {
-						foreach ($text as $textPart) {
-							$parts[] = $textPart;
-						}
-
-					} else {
-						$parts[] = $text;
+					foreach ($text as $textPart) {
+						$parts[] = $textPart;
 					}
 				}
 			}
@@ -59,26 +55,21 @@
 
 
 		/**
-		 * @return string|array<string|Ast\Node>
+		 * @return array<string|Ast\Node>
 		 */
-		private function parseText(Utils\StringParser $parser, Utils\ParametersParser $parametersParser)
+		private function parseText(Utils\StringParser $parser)
 		{
 			$text = $parser->consumeToText('<');
-
-			if (Strings::contains($text, '{$')) {
-				return $parametersParser->parse($text);
-			}
-
-			return $text;
+			return $this->textPartsProcessor->processMessage($text)->getChildren();
 		}
 
 
 		/**
 		 * @return Ast\Element|NULL
 		 */
-		private function tryParseElement(Utils\StringParser $parser, Utils\ParametersParser $parametersParser)
+		private function tryParseElement(Utils\StringParser $parser)
 		{
-			return $parser->tryParse(function (Utils\StringParser $parser) use ($parametersParser) {
+			return $parser->tryParse(function (Utils\StringParser $parser) {
 				$parser->consumeText('<');
 				$name = $this->parseName($parser);
 				$element = new Ast\Element($name);
@@ -91,8 +82,8 @@
 						$parser->consumeText('"');
 						$attributeValue = (string) $parser->tryConsumeToText('"');
 						$parser->consumeText('"');
-						$element->setAttribute($attributeName, ($attributeValue !== '' && Strings::contains($attributeValue, '{$'))
-							? $parametersParser->parse($attributeValue)
+						$element->setAttribute($attributeName, $attributeValue !== ''
+							? $this->textPartsProcessor->processMessage($attributeValue)->getChildren()
 							: $attributeValue
 						);
 
@@ -105,7 +96,7 @@
 
 				while (!$parser->isCurrent('</')) {
 					if ($parser->isCurrent('<')) {
-						$subElement = $this->tryParseElement($parser, $parametersParser);
+						$subElement = $this->tryParseElement($parser);
 
 						if ($subElement !== NULL) {
 							$element->addNode($subElement);
@@ -115,19 +106,15 @@
 						}
 					} else {
 						$content = $parser->consumeToText('<');
+						$textParts = $this->textPartsProcessor->processMessage($content)->getChildren();
 
-						if (Strings::contains($content, '{$')) {
-							foreach ($parametersParser->parse($content) as $contentPart) {
-								if ($contentPart instanceof Ast\Node) {
-									$element->addNode($contentPart);
+						foreach ($textParts as $textPart) {
+							if ($textPart instanceof Ast\Node) {
+								$element->addNode($textPart);
 
-								} else {
-									$element->addText($contentPart);
-								}
+							} else {
+								$element->addText($textPart);
 							}
-
-						} else {
-							$element->addText($content);
 						}
 					}
 				}

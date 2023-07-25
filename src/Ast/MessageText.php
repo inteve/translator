@@ -22,6 +22,15 @@
 
 
 		/**
+		 * @return array<string|Node>
+		 */
+		public function getChildren()
+		{
+			return $this->children;
+		}
+
+
+		/**
 		 * @param  array<string, mixed> $parameters
 		 * @return array<string|MessageElement>
 		 */
