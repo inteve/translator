@@ -25,7 +25,7 @@
 		public function __construct($tag)
 		{
 			Assert::string($tag);
-			Assert::true((bool) Strings::match($tag, '~^[a-z]{2}_[A-Z]{2}\\z~'), 'Invalid language tag.');
+			Assert::true((bool) Strings::match($tag, '~^[a-z]{2}\\-[A-Z]{2}\\z~'), 'Invalid language tag.');
 
 			$this->tag = $tag;
 		}
@@ -74,10 +74,10 @@
 		 */
 		public static function fromString($tag)
 		{
-			$tag = str_replace('-', '_', $tag);
+			$tag = str_replace('_', '-', $tag);
 
-			if (strpos($tag, '_') === FALSE && isset(self::$defaults[$tag])) {
-				$tag .= '_' . self::$defaults[$tag];
+			if (strpos($tag, '-') === FALSE && isset(self::$defaults[$tag])) {
+				$tag .= '-' . self::$defaults[$tag];
 			}
 
 			return new self($tag);
