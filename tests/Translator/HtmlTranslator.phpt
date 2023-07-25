@@ -20,7 +20,7 @@ function createTranslator($lang)
 					'homepage.unknow' => 'Hello, <muted>lorem <i>{$name|lower}!</i></muted>',
 				]),
 			]),
-			new Translator\Processors\HtmlProcessor
+			new Translator\Processors\TagProcessor
 		)
 	);
 }

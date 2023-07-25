@@ -7,7 +7,7 @@
 	use Nette\Utils\Strings;
 
 
-	class HtmlProcessor implements \Inteve\Translator\MessageProcessor
+	class TagProcessor implements \Inteve\Translator\MessageProcessor
 	{
 		/** @var Utils\ParametersParser|NULL */
 		private $parametersParser;

@@ -24,7 +24,7 @@ function createTranslator($lang)
 					'homepage.hello2' => 'Hello, <b>{$name}</b>!',
 				]),
 			]),
-			new Translator\Processors\HtmlProcessor
+			new Translator\Processors\TagProcessor
 		)
 	);
 }

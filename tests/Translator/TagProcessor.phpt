@@ -1,19 +1,19 @@
 <?php
 
 use Inteve\Translator\Ast;
-use Inteve\Translator\Processors\HtmlProcessor;
+use Inteve\Translator\Processors\TagProcessor;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
 test('Only text', function () {
-	$processor = new HtmlProcessor;
+	$processor = new TagProcessor;
 	Assert::equal(new Ast\MessageText(['lorem ipsum']), $processor->processMessage('lorem ipsum'));
 });
 
 
 test('Text & element', function () {
-	$processor = new HtmlProcessor;
+	$processor = new TagProcessor;
 	Assert::equal(new Ast\MessageText([
 		'lorem ',
 		Ast\Element::create(
@@ -28,7 +28,7 @@ test('Text & element', function () {
 
 
 test('Parameter', function () {
-	$processor = new HtmlProcessor;
+	$processor = new TagProcessor;
 	Assert::equal(new Ast\MessageText([
 		new Ast\Parameter('param'),
 	]), $processor->processMessage('{$param}'));
@@ -36,7 +36,7 @@ test('Parameter', function () {
 
 
 test('Complex', function () {
-	$processor = new HtmlProcessor;
+	$processor = new TagProcessor;
 	Assert::equal(new Ast\MessageText([
 		new Ast\Parameter('param'),
 		' lorem, ',
