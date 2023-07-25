@@ -1,7 +1,14 @@
 <?php
 
-	namespace Inteve\Translator;
+	namespace Inteve\Translator\Providers;
 
+	use Inteve\Translator\Ast;
+	use Inteve\Translator\Locale;
+	use Inteve\Translator\Message;
+	use Inteve\Translator\MessageId;
+	use Inteve\Translator\MessageLoader;
+	use Inteve\Translator\MessageProcessor;
+	use Inteve\Translator\MessageProvider;
 	use Nette\Utils\Strings;
 
 
