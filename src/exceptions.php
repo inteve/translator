@@ -21,3 +21,8 @@
 	class ParseException extends Exception
 	{
 	}
+
+
+	class StaticClassException extends Exception
+	{
+	}

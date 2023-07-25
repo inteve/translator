@@ -13,8 +13,9 @@
 
 		/** @var array<string, string> */
 		private static $defaults = [
-			'en' => 'US',
 			'cs' => 'CZ',
+			'de' => 'DE',
+			'en' => 'US',
 		];
 
 
@@ -46,6 +47,15 @@
 		public function isLang($lang)
 		{
 			return strncmp($this->tag, $lang, 2) === 0;
+		}
+
+
+		/**
+		 * @return string
+		 */
+		public function getLang()
+		{
+			return substr($this->tag, 0, 2);
 		}
 
 

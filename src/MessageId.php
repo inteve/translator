@@ -40,12 +40,13 @@
 
 		/**
 		 * @param  string|NULL $prefix
-		 * @return string|NULL
+		 * @return Domain|NULL
 		 */
 		public function getDomain($prefix = NULL)
 		{
 			if ($prefix === NULL) {
-				return Strings::before($this->id, '.');
+				$domainName = Strings::before($this->id, '.');
+				return $domainName !== NULL && $domainName !== '' ? new Domain($domainName) : NULL;
 			}
 
 			if (!Strings::startsWith($this->id, $prefix . '.')) {
@@ -53,7 +54,8 @@
 			}
 
 			$id = Strings::substring($this->id, Strings::length($prefix) + 1);
-			return Strings::before($id, '.');
+			$domainName = Strings::before($id, '.');
+			return $domainName !== NULL && $domainName !== '' ? new Domain($domainName) : NULL;
 		}
 
 
