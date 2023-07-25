@@ -13,6 +13,9 @@
 		/** @var MessageProcessor */
 		private $messageProcessor;
 
+		/** @var array<string, array<string, Ast\MessageText|NULL>> */
+		private $messagesCache = [];
+
 
 		/**
 		 * @param MessageLoader $messageLoader
@@ -34,20 +37,41 @@
 			array $parameters
 		)
 		{
-			$message = $this->messageLoader->getMessage($locale->getLanguageTag(), $messageId);
+			$languageTag = $locale->getLanguageTag();
+			$langTagKey = $languageTag->toString();
+			$messageIdKey = $messageId->toString();
 
-			if ($message === NULL || $message === '') {
-				return NULL;
+			if (!isset($this->messagesCache[$langTagKey][$messageIdKey])) {
+				if (!isset($this->messagesCache[$langTagKey])) {
+					$this->messagesCache[$langTagKey] = [];
+				}
 
-			} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
-				return $this->getMessage(
-					$locale,
-					new MessageId($tmp),
-					$parameters
-				);
+				if (array_key_exists($messageIdKey, $this->messagesCache[$langTagKey])) { // missing
+					return NULL;
+				}
+
+				$message = $this->messageLoader->getMessage($languageTag, $messageId);
+
+				if ($message === NULL || $message === '') {
+					return $this->messagesCache[$langTagKey][$messageIdKey] = NULL;
+
+				} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
+					$message = $this->getMessage(
+						$locale,
+						new MessageId($tmp),
+						$parameters
+					);
+
+					if (isset($this->messagesCache[$langTagKey][$tmp])) {
+						$this->messagesCache[$langTagKey][$messageIdKey] = $this->messagesCache[$langTagKey][$tmp];
+					}
+
+					return $message;
+				}
+
+				$this->messagesCache[$langTagKey][$messageIdKey] = $this->messageProcessor->processMessage($message);
 			}
 
-			$messageText = $this->messageProcessor->processMessage($message);
-			return new Message($messageId, $messageText->format($parameters, $locale));
+			return new Message($messageId, $this->messagesCache[$langTagKey][$messageIdKey]->format($parameters, $locale));
 		}
 	}
