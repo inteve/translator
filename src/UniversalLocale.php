@@ -90,6 +90,10 @@
 				return (string) $value;
 			}
 
+			if ($value instanceof \DateTimeInterface) {
+				return $value->format($this->dateTimeFormat);
+			}
+
 			return ''; // cannot be converted
 		}
 
