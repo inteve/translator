@@ -27,9 +27,9 @@
 		 */
 		public function __construct(
 			LanguageTag $languageTag,
-			$dateTimeFormat,
-			$dateFormat,
-			$timeFormat
+			$dateTimeFormat = 'Y-m-d H:i:s',
+			$dateFormat = 'Y-m-d',
+			$timeFormat = 'H:i:s'
 		)
 		{
 			$this->languageTag = $languageTag;
