@@ -16,7 +16,7 @@
 		 * @param string|MessageId $id
 		 * @param array<string, mixed> $parameters
 		 */
-		public function __construct($id, array $parameters)
+		public function __construct($id, array $parameters = [])
 		{
 			if (is_string($id)) {
 				$id = new MessageId($id);
