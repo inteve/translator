@@ -46,7 +46,7 @@
 		{
 			if ($prefix === NULL) {
 				$domainName = Strings::before($this->id, '.');
-				return $domainName !== NULL && $domainName !== '' ? new Domain($domainName) : NULL;
+				return is_string($domainName) && $domainName !== '' ? new Domain($domainName) : NULL;
 			}
 
 			if (!Strings::startsWith($this->id, $prefix . '.')) {
@@ -55,7 +55,7 @@
 
 			$id = Strings::substring($this->id, Strings::length($prefix) + 1);
 			$domainName = Strings::before($id, '.');
-			return $domainName !== NULL && $domainName !== '' ? new Domain($domainName) : NULL;
+			return is_string($domainName) && $domainName !== '' ? new Domain($domainName) : NULL;
 		}
 
 
