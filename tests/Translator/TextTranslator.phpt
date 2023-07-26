@@ -46,3 +46,36 @@ test('with parameters', function () {
 	$enTranslator = createTranslator('en');
 	Assert::same('Hello, John!', $enTranslator->translate('homepage.hello2', ['name' => 'John']));
 });
+
+
+test('NoTranslate', function () {
+	$translator = createTranslator('en');
+	Assert::same('homepage.hello', $translator->translate(new Translator\NotTranslate('homepage.hello'), ['name' => 'John']));
+	Assert::same('Lorem Ipsum dolor sit amet', $translator->translate(new Translator\NotTranslate('Lorem Ipsum dolor sit amet'), ['name' => 'John']));
+});
+
+
+test('Translate', function () {
+	$translator = createTranslator('en');
+	Assert::same('Hello, John!', $translator->translate(new Translator\Translate('homepage.hello2'), ['name' => 'John']));
+	Assert::same('Hello, John!', $translator->translate(new Translator\Translate('homepage.hello2', ['name' => 'Jack']), ['name' => 'John']));
+	Assert::same('Hello, Jack!', $translator->translate(new Translator\Translate('homepage.hello2', ['name' => 'Jack'])));
+});
+
+
+test('MessageId', function () {
+	$translator = createTranslator('en');
+	Assert::same('Hello, John!', $translator->translate(new Translator\MessageId('homepage.hello2'), ['name' => 'John']));
+});
+
+
+test('Prefix', function () {
+	$translator = createTranslator('en')->prefix('homepage');
+	Assert::same('Hello, John!', $translator->translate('hello2', ['name' => 'John']));
+});
+
+
+test('Missing translation', function () {
+	$translator = createTranslator('en');
+	Assert::same('missing.message', $translator->translate('missing.message'));
+});

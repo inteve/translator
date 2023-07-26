@@ -18,12 +18,14 @@ test('Text & element', function () {
 		'lorem ',
 		Ast\Element::create(
 			'b',
-			[],
+			[
+				'disabled' => TRUE,
+			],
 			[
 				'ipsum',
 			]
 		)
-	]), $processor->processMessage('lorem <b>ipsum</b>'));
+	]), $processor->processMessage('lorem <b disabled>ipsum</b>'));
 });
 
 

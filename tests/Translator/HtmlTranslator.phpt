@@ -31,3 +31,36 @@ test('tag filtering', function () {
 	Assert::same('Hello, <b>John</b>!', (string) $translator->translate('homepage.hello', ['name' => 'John']));
 	Assert::same('Hello, lorem <i>john!</i>', (string) $translator->translate('homepage.unknow', ['name' => 'John']));
 });
+
+
+test('NoTranslate', function () {
+	$translator = createTranslator('en');
+	Assert::same('homepage.hello', (string) $translator->translate(new Translator\NotTranslate('homepage.hello'), ['name' => 'John']));
+	Assert::same('Lorem Ipsum dolor sit amet', (string) $translator->translate(new Translator\NotTranslate('Lorem Ipsum dolor sit amet'), ['name' => 'John']));
+});
+
+
+test('Translate', function () {
+	$translator = createTranslator('en');
+	Assert::same('Hello, <b>John</b>!', (string) $translator->translate(new Translator\Translate('homepage.hello'), ['name' => 'John']));
+	Assert::same('Hello, <b>John</b>!', (string) $translator->translate(new Translator\Translate('homepage.hello', ['name' => 'Jack']), ['name' => 'John']));
+	Assert::same('Hello, <b>Jack</b>!', (string) $translator->translate(new Translator\Translate('homepage.hello', ['name' => 'Jack'])));
+});
+
+
+test('MessageId', function () {
+	$translator = createTranslator('en');
+	Assert::same('Hello, <b>John</b>!', (string) $translator->translate(new Translator\MessageId('homepage.hello'), ['name' => 'John']));
+});
+
+
+test('Prefix', function () {
+	$translator = createTranslator('en')->prefix('homepage');
+	Assert::same('Hello, <b>John</b>!', (string) $translator->translate('hello', ['name' => 'John']));
+});
+
+
+test('Missing translation', function () {
+	$translator = createTranslator('en');
+	Assert::same('missing.message', $translator->translate('missing.message'));
+});

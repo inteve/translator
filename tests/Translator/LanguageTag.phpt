@@ -9,9 +9,13 @@ require __DIR__ . '/../bootstrap.php';
 test('valid', function () {
 	$tag = new LanguageTag('cs-CZ');
 	Assert::same('cs-CZ', $tag->toString());
+	Assert::true($tag->isLang('cs'));
+	Assert::false($tag->isLang('en'));
 
 	$tag = new LanguageTag('en-US');
 	Assert::same('en-US', $tag->toString());
+	Assert::false($tag->isLang('cs'));
+	Assert::true($tag->isLang('en'));
 });
 
 
