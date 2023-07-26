@@ -27,3 +27,41 @@ test('Missing message', function () {
 	Assert::null($provider->getMessage($locale, new MessageId('missing.message'), []));
 	Assert::null($provider->getMessage($locale, new MessageId('missing.message'), []), 'Missing message loaded from memory cache');
 });
+
+
+test('Message reference', function () {
+	$provider = new UniversalProvider(
+		new ArrayLoader(LanguageTag::fromString('en'), [
+			'page1.title' => 'Message 1',
+			'page2.title' => '@page1.title',
+			'page3.title' => '@page2.title',
+			'page4.title' => '@page3.title',
+		]),
+		new TagProcessor
+	);
+	$locale = new UniversalLocale(LanguageTag::fromString('en'));
+
+	$message = $provider->getMessage($locale, new MessageId('page2.title'), []);
+	assert($message !== NULL);
+	Assert::same(['Message 1'], $message->getElements());
+
+	$message = $provider->getMessage($locale, new MessageId('page4.title'), []);
+	assert($message !== NULL);
+	Assert::same(['Message 1'], $message->getElements());
+});
+
+
+test('Message cyclic reference', function () {
+	$provider = new UniversalProvider(
+		new ArrayLoader(LanguageTag::fromString('en'), [
+			'page1.title' => '@page4.title',
+			'page2.title' => '@page1.title',
+			'page3.title' => '@page2.title',
+			'page4.title' => '@page3.title',
+		]),
+		new TagProcessor
+	);
+	$locale = new UniversalLocale(LanguageTag::fromString('en'));
+
+	Assert::null($provider->getMessage($locale, new MessageId('page4.title'), []));
+});

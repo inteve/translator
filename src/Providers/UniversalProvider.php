@@ -63,6 +63,7 @@
 					return $this->messagesCache[$langTagKey][$messageIdKey] = NULL;
 
 				} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
+					$this->messagesCache[$langTagKey][$messageIdKey] = NULL;
 					$message = $this->getMessage(
 						$locale,
 						new MessageId($tmp),
