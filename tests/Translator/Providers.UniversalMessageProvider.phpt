@@ -4,7 +4,7 @@ use Inteve\Translator\LanguageTag;
 use Inteve\Translator\Loaders\ArrayLoader;
 use Inteve\Translator\MessageId;
 use Inteve\Translator\Processors\TagProcessor;
-use Inteve\Translator\Providers\UniversalMessageProvider;
+use Inteve\Translator\Providers\UniversalProvider;
 use Inteve\Translator\UniversalLocale;
 use Tester\Assert;
 
@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 test('Missing message', function () {
-	$provider = new UniversalMessageProvider(
+	$provider = new UniversalProvider(
 		new ArrayLoader(LanguageTag::fromString('en'), [
 			'message' => 'Message 1',
 		]),

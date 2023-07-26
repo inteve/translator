@@ -13,7 +13,7 @@ function createTranslator($lang)
 {
 	return new Translator\TextTranslator(
 		Tests::createLocale($lang),
-		new Translator\Providers\UniversalMessageProvider(
+		new Translator\Providers\UniversalProvider(
 			new Translator\Loaders\MultiLoader([
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('en'), [
 					'pages.homepage.hello' => 'Hello!',

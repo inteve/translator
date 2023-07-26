@@ -12,7 +12,7 @@
 	use Nette\Utils\Strings;
 
 
-	class UniversalMessageProvider implements MessageProvider
+	class UniversalProvider implements MessageProvider
 	{
 		/** @var MessageLoader */
 		private $messageLoader;
