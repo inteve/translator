@@ -8,7 +8,7 @@
 		/** @var non-empty-string */
 		private $name;
 
-		/** @var array<non-empty-string, string|bool> */
+		/** @var array<non-empty-lowercase-string, string|bool> */
 		private $attributes = [];
 
 		/** @var array<string|self> */
@@ -16,8 +16,8 @@
 
 
 		/**
-		 * @param non-empty-string $name
-		 * @param array<non-empty-string, string|bool> $attributes
+		 * @param non-empty-lowercase-string $name
+		 * @param array<non-empty-lowercase-string, string|bool> $attributes
 		 * @param array<string|self> $children
 		 */
 		public function __construct(
@@ -49,7 +49,7 @@
 
 
 		/**
-		 * @return non-empty-string
+		 * @return non-empty-lowercase-string
 		 */
 		public function getName()
 		{
@@ -67,8 +67,8 @@
 
 
 		/**
-		 * @param  non-empty-string[]|NULL $whitelist
-		 * @return array<non-empty-string, string|bool>
+		 * @param  non-empty-lowercase-string[]|NULL $whitelist
+		 * @return array<non-empty-lowercase-string, string|bool>
 		 */
 		public function getAttributes(array $whitelist = NULL)
 		{
@@ -89,7 +89,7 @@
 
 
 		/**
-		 * @param  string $name
+		 * @param  non-empty-lowercase-string $name
 		 * @return bool
 		 */
 		public function hasAttribute($name)
@@ -99,7 +99,7 @@
 
 
 		/**
-		 * @param  non-empty-string $name
+		 * @param  non-empty-lowercase-string $name
 		 * @return string|bool
 		 */
 		public function getAttribute($name)
@@ -133,8 +133,8 @@
 
 
 		/**
-		 * @param  non-empty-string $name
-		 * @param  array<non-empty-string, string|bool> $attributes
+		 * @param  non-empty-lowercase-string $name
+		 * @param  array<non-empty-lowercase-string, string|bool> $attributes
 		 * @param  array<string|self> $children
 		 * @return self
 		 */
