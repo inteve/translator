@@ -20,7 +20,7 @@
 
 		/**
 		 * @param non-empty-string $name
-		 * @param array<non-empty-string, string|Node|array<string|Node>> $attributes
+		 * @param array<non-empty-string, string|Node|bool|array<string|Node>> $attributes
 		 */
 		public function __construct($name, array $attributes = [])
 		{
@@ -106,7 +106,7 @@
 
 		/**
 		 * @param  non-empty-string $name
-		 * @param  array<non-empty-string, string|Node|array<string|Node>> $attributes
+		 * @param  array<non-empty-string, string|Node|bool|array<string|Node>> $attributes
 		 * @param  array<string|Node> $children
 		 * @return self
 		 */
