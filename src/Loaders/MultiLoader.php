@@ -18,7 +18,7 @@
 		 */
 		public function __construct(array $loaders)
 		{
-			$this->loaders = array_reverse($loaders);
+			$this->loaders = $loaders;
 		}
 
 
