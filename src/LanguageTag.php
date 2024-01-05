@@ -8,7 +8,7 @@
 
 	class LanguageTag
 	{
-		/** @var string */
+		/** @var non-empty-string */
 		private $tag;
 
 		/** @var array<string, string> */
@@ -26,6 +26,7 @@
 		{
 			Assert::string($tag);
 			Assert::true((bool) Strings::match($tag, '~^[a-z]{2}\\-[A-Z]{2}\\z~'), 'Invalid language tag.');
+			Assert::true($tag !== '');
 
 			$this->tag = $tag;
 		}
@@ -51,7 +52,7 @@
 
 
 		/**
-		 * @return string
+		 * @return non-empty-string
 		 */
 		public function getLang()
 		{
@@ -60,7 +61,7 @@
 
 
 		/**
-		 * @return string
+		 * @return non-empty-string
 		 */
 		public function toString()
 		{
