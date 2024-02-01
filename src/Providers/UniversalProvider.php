@@ -59,7 +59,7 @@
 
 				$message = $this->messageLoader->getMessage($languageTag, $messageId);
 
-				if ($message === NULL || $message === '') {
+				if ($message === NULL) {
 					return $this->messagesCache[$langTagKey][$messageIdKey] = NULL;
 
 				} elseif (Strings::startsWith($message, '@') && MessageId::isValid($tmp = Strings::substring($message, 1))) {
@@ -77,7 +77,9 @@
 					return $message;
 				}
 
-				$this->messagesCache[$langTagKey][$messageIdKey] = $this->messageProcessor->processMessage($message);
+				$this->messagesCache[$langTagKey][$messageIdKey] = $message !== ''
+					? $this->messageProcessor->processMessage($message)
+					: new Ast\MessageText([]);
 			}
 
 			return new Message($messageId, $this->messagesCache[$langTagKey][$messageIdKey]->format($parameters, $locale));
