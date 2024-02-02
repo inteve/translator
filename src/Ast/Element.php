@@ -29,6 +29,15 @@
 		}
 
 
+		/**
+		 * @return non-empty-string
+		 */
+		public function getName()
+		{
+			return $this->name;
+		}
+
+
 		public function format(array $parameters, Locale $locale)
 		{
 			$attrs = [];

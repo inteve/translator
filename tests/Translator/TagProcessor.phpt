@@ -55,3 +55,13 @@ test('Complex', function () {
 			),
 	]), $processor->processMessage('{$param} lorem, <b title="Ipsum {$title}">{$name} <i>{$count}</i></b>'));
 });
+
+
+test('Empty elements', function () {
+	$processor = new TagProcessor;
+	Assert::equal(new Ast\MessageText([
+		'Lorem ipsum',
+		Ast\Element::create('br'),
+		'dolor sit amet',
+	]), $processor->processMessage('Lorem ipsum<br>dolor sit amet'));
+});

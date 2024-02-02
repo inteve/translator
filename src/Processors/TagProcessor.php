@@ -11,10 +11,24 @@
 		/** @var \Inteve\Translator\MessageProcessor */
 		private $textPartsProcessor;
 
+		/** @var array<non-empty-string, TRUE> */
+		private $emptyElements;
 
-		public function __construct(\Inteve\Translator\MessageProcessor $textPartsProcessor = NULL)
+
+		/**
+		 * @param array<non-empty-string> $emptyElements
+		 */
+		public function __construct(
+			\Inteve\Translator\MessageProcessor $textPartsProcessor = NULL,
+			array $emptyElements = ['br']
+		)
 		{
 			$this->textPartsProcessor = $textPartsProcessor !== NULL ? $textPartsProcessor : new ParametersProcessor;
+			$this->emptyElements = [];
+
+			foreach ($emptyElements as $emptyElement) {
+				$this->emptyElements[strtolower($emptyElement)] = TRUE;
+			}
 		}
 
 
@@ -37,7 +51,7 @@
 					if (($part = $this->tryParseElement($parser)) !== NULL) {
 						$parts[] = $part;
 
-					} else { // invalid parameter
+					} else { // invalid tag
 						$parts[] = $parser->consume(1);
 					}
 
@@ -93,6 +107,10 @@
 				}
 
 				$parser->consumeText('>');
+
+				if (isset($this->emptyElements[$element->getName()])) {
+					return $element;
+				}
 
 				while (!$parser->isCurrent('</')) {
 					if ($parser->isCurrent('<')) {
