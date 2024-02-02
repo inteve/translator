@@ -18,6 +18,7 @@ function createTranslator($lang)
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('en'), [
 					'homepage.hello' => 'Hello, <b>{$name}</b>!',
 					'homepage.unknow' => 'Hello, <muted>lorem <i>{$name|lower}!</i></muted>',
+					'homepage.br' => 'Hello<br>friends',
 				]),
 			]),
 			new Translator\Processors\TagProcessor
@@ -30,6 +31,12 @@ test('tag filtering', function () {
 	$translator = createTranslator('en');
 	Assert::same('Hello, <b>John</b>!', (string) $translator->translate('homepage.hello', ['name' => 'John']));
 	Assert::same('Hello, lorem <i>john!</i>', (string) $translator->translate('homepage.unknow', ['name' => 'John']));
+});
+
+
+test('empty tags', function () {
+	$translator = createTranslator('en');
+	Assert::same('Hello<br>friends', (string) $translator->translate('homepage.br'));
 });
 
 

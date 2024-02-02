@@ -22,6 +22,7 @@ function createTranslator($lang)
 				new Translator\Loaders\ArrayLoader(Translator\LanguageTag::fromString('en'), [
 					'homepage.hello' => 'Hello!',
 					'homepage.hello2' => 'Hello, <b>{$name}</b>!',
+					'homepage.br' => 'Hello<br>friends',
 				]),
 			]),
 			new Translator\Processors\TagProcessor
@@ -45,6 +46,12 @@ test('with parameters', function () {
 
 	$enTranslator = createTranslator('en');
 	Assert::same('Hello, John!', $enTranslator->translate('homepage.hello2', ['name' => 'John']));
+});
+
+
+test('empty tags', function () {
+	$translator = createTranslator('en');
+	Assert::same("Hello\nfriends", (string) $translator->translate('homepage.br'));
 });
 
 

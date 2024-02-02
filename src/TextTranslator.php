@@ -67,6 +67,11 @@
 
 			foreach ($message->getElements() as $element) {
 				if ($element instanceof MessageElement) {
+					if ($element->is('br')) {
+						$res .= "\n";
+						continue;
+					}
+
 					$res .= $element->toText();
 
 				} else {

@@ -25,6 +25,10 @@
 				]));
 			}
 
+			if ($element->is('br')) {
+				return Html::el('br');
+			}
+
 			return NULL;
 		}
 	}
