@@ -61,6 +61,27 @@
 
 
 		/**
+		 * @param  string $country
+		 * @return bool
+		 */
+		public function isCountry($country)
+		{
+			return substr_compare($this->tag, strtoupper($country), 3, 2, FALSE) === 0;
+		}
+
+
+		/**
+		 * @return non-empty-string
+		 */
+		public function getCountry()
+		{
+			$country = substr($this->tag, 3, 2);
+			assert($country !== '');
+			return $country;
+		}
+
+
+		/**
 		 * @return non-empty-string
 		 */
 		public function toString()
