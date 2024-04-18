@@ -23,7 +23,7 @@
 			array $emptyElements = ['br']
 		)
 		{
-			$this->textPartsProcessor = $textPartsProcessor !== NULL ? $textPartsProcessor : new ParametersProcessor;
+			$this->textPartsProcessor = $textPartsProcessor !== NULL ? $textPartsProcessor : new EntityProcessor(new ParametersProcessor);
 			$this->emptyElements = [];
 
 			foreach ($emptyElements as $emptyElement) {

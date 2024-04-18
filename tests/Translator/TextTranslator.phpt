@@ -23,6 +23,7 @@ function createTranslator($lang)
 					'homepage.hello' => 'Hello!',
 					'homepage.hello2' => 'Hello, <b>{$name}</b>!',
 					'homepage.br' => 'Hello<br>friends',
+					'homepage.entity' => 'A&nbsp;entity',
 				]),
 			]),
 			new Translator\Processors\TagProcessor
@@ -73,6 +74,12 @@ test('Translate', function () {
 test('MessageId', function () {
 	$translator = createTranslator('en');
 	Assert::same('Hello, John!', $translator->translate(new Translator\MessageId('homepage.hello2'), ['name' => 'John']));
+});
+
+
+test('Entities', function () {
+	$translator = createTranslator('en');
+	Assert::same("A\xC2\xA0entity", (string) $translator->translate('homepage.entity'));
 });
 
 
