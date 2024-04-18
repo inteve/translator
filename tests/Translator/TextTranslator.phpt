@@ -24,6 +24,8 @@ function createTranslator($lang)
 					'homepage.hello2' => 'Hello, <b>{$name}</b>!',
 					'homepage.br' => 'Hello<br>friends',
 					'homepage.entity' => 'A&nbsp;entity',
+					'homepage.ul' => '<ul><li>A</li><li>B</li></ul>',
+					'homepage.ol' => '<ol><li>A</li><li>B</li></ol>',
 				]),
 			]),
 			new Translator\Processors\TagProcessor
@@ -74,6 +76,13 @@ test('Translate', function () {
 test('MessageId', function () {
 	$translator = createTranslator('en');
 	Assert::same('Hello, John!', $translator->translate(new Translator\MessageId('homepage.hello2'), ['name' => 'John']));
+});
+
+
+test('Lists', function () {
+	$translator = createTranslator('en');
+	Assert::same("- A\n- B\n", (string) $translator->translate('homepage.ul'));
+	Assert::same("1. A\n2. B\n", (string) $translator->translate('homepage.ol'));
 });
 
 

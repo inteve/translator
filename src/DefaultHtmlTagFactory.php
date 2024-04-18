@@ -25,6 +25,13 @@
 				]));
 			}
 
+			if ($element->is('ul', 'ol', 'li')) {
+				return Html::el($element->getName(), $element->getAttributes([
+					'class',
+					'title',
+				]));
+			}
+
 			if ($element->is('br')) {
 				return Html::el('br');
 			}
