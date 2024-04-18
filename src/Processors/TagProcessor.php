@@ -89,6 +89,11 @@
 				$element = new Ast\Element($name);
 
 				while ($parser->tryConsumeByMatch('\\s*') !== NULL) {
+					if ($parser->isCurrent('/>')) { // self-closing
+						$parser->consumeText('/>');
+						return $element;
+					}
+
 					$attributeName = $this->parseName($parser);
 
 					if ($parser->isCurrent('=')) {

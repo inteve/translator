@@ -65,3 +65,13 @@ test('Empty elements', function () {
 		'dolor sit amet',
 	]), $processor->processMessage('Lorem ipsum<br>dolor sit amet'));
 });
+
+
+test('Self-closing elements', function () {
+	$processor = new TagProcessor;
+	Assert::equal(new Ast\MessageText([
+		'Lorem ipsum',
+		Ast\Element::create('b'),
+		'dolor sit amet',
+	]), $processor->processMessage('Lorem ipsum<b />dolor sit amet'));
+});
