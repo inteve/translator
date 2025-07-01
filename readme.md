@@ -18,7 +18,7 @@ Translator for your PHP applications.
 composer require inteve/translator
 ```
 
-Inteve\Translator requires PHP 5.6.0 or later
+Inteve\Translator requires PHP 8.0 or later
 
 
 ------------------------------
