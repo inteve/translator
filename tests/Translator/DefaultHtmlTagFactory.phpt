@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\DefaultHtmlTagFactory;
 use Inteve\Translator\MessageElement;
 use Tester\Assert;

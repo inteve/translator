@@ -1,5 +1,7 @@
 <?php
 
+	declare(strict_types=1);
+
 	namespace Inteve\Translator\Ast;
 
 	use Inteve\Translator\Locale;

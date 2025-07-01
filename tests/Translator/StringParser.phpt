@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\Utils\StringParser;
 use Tester\Assert;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\Ast;
 use Inteve\Translator\Processors\EntityProcessor;
 use Inteve\Translator\Processors\ParametersProcessor;

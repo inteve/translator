@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\Domain;
 use Inteve\Translator\MessageId;
 use Tester\Assert;

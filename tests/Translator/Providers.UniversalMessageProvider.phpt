@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\LanguageTag;
 use Inteve\Translator\Loaders\ArrayLoader;
 use Inteve\Translator\MessageId;

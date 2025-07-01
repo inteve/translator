@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Inteve\Translator\Ast\Parameter;
 use Tester\Assert;
 
