@@ -14,7 +14,7 @@
 		private $textProcessor;
 
 
-		public function __construct(MessageProcessor $textProcessor = NULL)
+		public function __construct(?MessageProcessor $textProcessor = NULL)
 		{
 			$this->textProcessor = $textProcessor;
 		}

@@ -72,7 +72,7 @@
 		 * @param  non-empty-lowercase-string[]|NULL $whitelist
 		 * @return array<non-empty-lowercase-string, string|bool>
 		 */
-		public function getAttributes(array $whitelist = NULL)
+		public function getAttributes(?array $whitelist = NULL)
 		{
 			if ($whitelist !== NULL) {
 				$res = [];

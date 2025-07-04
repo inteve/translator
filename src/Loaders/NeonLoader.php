@@ -36,7 +36,7 @@
 		 * @param  string|NULL $prefix
 		 * @param  non-empty-string $directory
 		 */
-		public function __construct($prefix, $directory, FileFinder $fileFinder = NULL)
+		public function __construct($prefix, $directory, ?FileFinder $fileFinder = NULL)
 		{
 			$this->prefix = $prefix !== '' ? $prefix : NULL;
 			$this->directory = $directory;
@@ -96,7 +96,7 @@
 		/**
 		 * @return void
 		 */
-		private function loadFiles(LanguageTag $languageTag, Domain $domain = NULL)
+		private function loadFiles(LanguageTag $languageTag, ?Domain $domain)
 		{
 			foreach ($this->fileFinder->findDomainFiles($this->directory, $domain, $languageTag, 'neon') as $file) {
 				$this->loadFile($file, $languageTag);

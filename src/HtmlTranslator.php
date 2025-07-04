@@ -22,7 +22,7 @@
 		public function __construct(
 			Locale $locale,
 			MessageProvider $messageProvider,
-			HtmlTagFactory $htmlTagFactory = NULL
+			?HtmlTagFactory $htmlTagFactory = NULL
 		)
 		{
 			$this->locale = $locale;

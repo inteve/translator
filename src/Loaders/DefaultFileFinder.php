@@ -27,7 +27,7 @@
 
 		public function findDomainFiles(
 			$directory,
-			Domain $domain = NULL,
+			?Domain $domain,
 			LanguageTag $languageTag,
 			$extension
 		)

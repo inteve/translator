@@ -21,7 +21,7 @@
 		 * @param array<non-empty-string> $emptyElements
 		 */
 		public function __construct(
-			\Inteve\Translator\MessageProcessor $textPartsProcessor = NULL,
+			?\Inteve\Translator\MessageProcessor $textPartsProcessor = NULL,
 			array $emptyElements = ['br']
 		)
 		{
